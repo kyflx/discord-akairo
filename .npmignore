@@ -8,5 +8,6 @@ node_modules
 .travis.yml
 test/
 docs/
+src/
 tsconfig.json
 tslint.json

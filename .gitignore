@@ -3,3 +3,6 @@ node_modules
 .vscode
 test/auth.json
 test/db.sqlite
+build/
+docs/
+test/
