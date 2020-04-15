@@ -1,4 +1,4 @@
-import AkairoClient from "../AkairoClient";
+import { AkairoClient } from "../AkairoClient";
 import { Listener } from "./Listener";
 import { AkairoHandler, AkairoHandlerOptions } from "../AkairoHandler";
 import { Collection } from "discord.js";

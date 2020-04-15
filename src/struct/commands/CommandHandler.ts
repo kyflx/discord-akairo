@@ -1,6 +1,6 @@
 import { Channel, Collection, Message, TextChannel, User } from "discord.js";
 import { AkairoError, BuiltInReasons, CommandHandlerEvents, OrArray, OrPromise, Util } from "../../util";
-import AkairoClient from "../AkairoClient";
+import { AkairoClient } from "../AkairoClient";
 import { AkairoHandler, AkairoHandlerOptions } from "../AkairoHandler";
 import { InhibitorHandler } from "../inhibitors/InhibitorHandler";
 import { ListenerHandler } from "../listeners/ListenerHandler";

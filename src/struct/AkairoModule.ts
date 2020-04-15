@@ -1,5 +1,5 @@
 import { AkairoHandler } from "./AkairoHandler";
-import AkairoClient from "./AkairoClient";
+import { AkairoClient } from "./AkairoClient";
 import { Category } from "../util";
 
 export interface AkairoModuleOptions {

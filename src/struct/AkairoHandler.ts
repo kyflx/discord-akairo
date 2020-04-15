@@ -3,7 +3,7 @@ import { EventEmitter } from "events";
 import { readdirSync, statSync } from "fs";
 import { dirname, extname, join, resolve, sep } from "path";
 import { AkairoHandlerEvents, Category } from "..";
-import AkairoClient from "./AkairoClient";
+import { AkairoClient } from "./AkairoClient";
 import { AkairoModule } from "./AkairoModule";
 import { AkairoError } from "../util";
 

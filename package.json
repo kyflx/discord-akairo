@@ -1,6 +1,5 @@
 {
-  "name": "@kyflx-dev/akairo",
-  "version": "1.0.2",
+A  "version": "1.0.2",
   "description": "A highly customizable bot framework for Discord.js.",
   "main": "./build/index.js",
   "types": "./build/index.d.ts",

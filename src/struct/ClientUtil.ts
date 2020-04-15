@@ -1,4 +1,4 @@
-import AkairoClient from "./AkairoClient";
+import { AkairoClient } from "./AkairoClient";
 import {
   Collection,
   User,

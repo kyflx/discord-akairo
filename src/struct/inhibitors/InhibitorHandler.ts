@@ -1,6 +1,6 @@
 import { AkairoHandler, AkairoHandlerOptions } from "../AkairoHandler";
 import { Inhibitor, InhibitorType } from "./Inhibitor";
-import AkairoClient from "../AkairoClient";
+import { AkairoClient } from "../AkairoClient";
 import { Message } from "discord.js";
 import { AkairoError, Util } from "../../util";
 import { Command } from "../commands/Command";
