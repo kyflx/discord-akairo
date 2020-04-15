@@ -1,45 +1,48 @@
 {
-    "name": "@kyflx/akairo",
-    "version": "8.0.0",
-    "description": "A highly customizable bot framework for Discord.js.",
-    "main": "./build/index.js",
-    "types": "./build/index.d.ts",
-    "author": "1Computer",
-    "license": "MIT",
-    "keywords": [
-        "discord",
-        "discord-js",
-        "discord.js",
-        "framework",
-        "bot",
-        "client",
-        "modular",
-        "commands",
-        "arguments"
-    ],
-    "dependencies": {},
-    "peerDependencies": {
-        "discord.js": "^12.0.0",
-        "sqlite": "^3.0.3",
-        "sequelize": "^5.2.12"
-    },
-    "devDependencies": {
-        "@ayanaware/ts": "^1.1.3",
-        "@types/node": "^10.14.4",
-        "discord.js": "^12.1.1",
-        "sequelize": "^5.21.6",
-        "sqlite": "^4.0.7",
-        "typescript": "^3.4.2"
-    },
-    "scripts": {
-        "prepublish": "ayc clean build"
-    },
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/discord-akairo/discord-akairo.git"
-    },
-    "bugs": {
-        "url": "https://github.com/discord-akairo/discord-akairo/issues"
-    },
-    "homepage": "https://github.com/discord-akairo/discord-akairo"
+  "name": "@kyflx-dev/akairo",
+  "version": "1.0.1",
+  "description": "A highly customizable bot framework for Discord.js.",
+  "main": "./build/index.js",
+  "types": "./build/index.d.ts",
+  "author": "melike2d",
+  "license": "MIT",
+  "keywords": [
+    "discord",
+    "discord-js",
+    "discord.js",
+    "framework",
+    "bot",
+    "client",
+    "modular",
+    "commands",
+    "arguments" 
+  ],
+  "dependencies": {},
+  "peerDependencies": {
+    "discord.js": "^12.1.1",
+    "sqlite": "^3.0.3",
+    "sequelize": "^5.2.12"
+  },
+  "devDependencies": {
+    "@ayanaware/ts": "^1.1.3",
+    "@types/node": "^10.14.4",
+    "discord.js": "^12.1.1",
+    "sequelize": "^5.21.6",
+    "sqlite": "^4.0.7",
+    "typescript": "^3.4.2"
+  },
+  "scripts": {
+    "prepare": "ayc clean build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kyflx/discord-akairo.git"
+  },
+  "bugs": {
+    "url": "https://github.com/kyflx/discord-akairo/issues"
+  },
+  "homepage": "https://github.com/kyflx/discord-akairo",
+  "publishConfig": {
+    "access": "public"
+  }
 }

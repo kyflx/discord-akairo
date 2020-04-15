@@ -1,13 +1,13 @@
-# @kyflx/akairo
+# @kyflx-dev/akairo
 
 This is basically just a fork of [discord-akairo](https://github.com/discord-akairo/discord-akairo) but It's in [Typescript](https://www.typescriptlang.org) and it uses CommandContext for prompts and shit.
 
-## Customizatiom
+## Customization
 
 The only customizable class as of right now is `CommandContext`
 
 ```ts
-import { Structures } from "@kyflx/akairo";
+import { Structures } from "@kyflx-dev/akairo";
 
 Structures.extend(
   "CommandContext",
@@ -19,7 +19,7 @@ Structures.extend(
     }
 );
 
-declare module "@kyflx/akairo" {
+declare module "@kyflx-dev/akairo" {
   interface CommandContext {
     lol: string;
   }
@@ -32,5 +32,5 @@ declare module "@kyflx/akairo" {
 We do **not** provide support for this package as it was made for Kyflx.
 
 ```bash
-$ npm install @kyflx/akairo
+$ npm install @kyflx-dev/akairo
 ```
