@@ -367,5 +367,3 @@ export class ClientUtil {
     return new MessageAttachment(file, name);
   }
 }
-
-module.exports = ClientUtil;
