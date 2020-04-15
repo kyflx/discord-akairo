@@ -5,7 +5,7 @@ export interface AkairoOptions {
   ownerID?: Snowflake | Snowflake[];
 }
 
-export default class AkairoClient extends Client {
+export class AkairoClient extends Client {
   public util: ClientUtil = new ClientUtil(this);
   public ownerID: Snowflake | Snowflake[];
 
