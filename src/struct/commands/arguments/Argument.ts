@@ -131,14 +131,14 @@ export type ArgumentType =
   | string;
 export type Content = StringResolvable | MessageOptions | MessageAdditions;
 export type Modifier<D, T> = (
-  ctx?: any,
+  ctx?: CommandContext,
   text?: Content,
   data?: D
 ) => T | Promise<T>;
-export type Supplier<D, T> = (ctx?: any, data?: D) => T | Promise<T>;
-export type ArgumentTypeCaster = (ctx?: any, value?: any) => any;
+export type Supplier<D, T> = (ctx?: CommandContext, data?: D) => T | Promise<T>;
+export type ArgumentTypeCaster = (ctx?: CommandContext, value?: any) => any;
 export type ParsedValuePredicate = (
-  ctx?: any,
+  ctx?: CommandContext,
   phrase?: string,
   value?: any
 ) => boolean;
