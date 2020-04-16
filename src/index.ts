@@ -11,4 +11,3 @@ declare module "discord.js" {
     edited: boolean;
   }
 }
-
