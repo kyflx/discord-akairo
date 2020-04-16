@@ -5,7 +5,8 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "rootDir": "src",
-    "declaration": false
+    "declaration": false,
+    "sourceMap": false
   },
   "exclude": ["./build/"]
 }

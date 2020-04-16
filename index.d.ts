@@ -1,34 +1,34 @@
 declare module "@kyflx-dev/akairo" {
-  import {
-    BufferResolvable,
-    Channel,
-    Client,
-    ClientOptions,
-    Collection,
-    DMChannel,
-    Emoji,
-    Guild,
-    GuildMember,
-    Message,
-    MessageAdditions,
-    MessageAttachment,
-    MessageEditOptions,
-    MessageEmbed,
-    MessageOptions,
-    PermissionResolvable,
-    Role,
-    Snowflake,
-    StringResolvable,
-    TextChannel,
-    User,
-    VoiceChannel,
-    VoiceState,
-    UserResolvable,
-  } from "discord.js";
+  import { BufferResolvable, Channel, Client, ClientOptions, Collection, DMChannel, Emoji, Guild, GuildMember, Message, MessageAdditions, MessageAttachment, MessageEditOptions, MessageEmbed, MessageOptions, PermissionResolvable, Role, Snowflake, StringResolvable, TextChannel, User, UserResolvable, VoiceChannel, VoiceState } from "discord.js";
   import { EventEmitter } from "events";
+  import { Database } from "sqlite";
   import { Stream } from "stream";
-  import { CommandHandler } from "./CommandHandler";
-  import { CommandUtil } from "./CommandUtil";
+
+  export declare class SQLiteProvider<T extends any> extends Provider<T> {
+    #private;
+    tableName: string;
+    idColumn: string;
+    dataColumn: string;
+    constructor(
+      db: Database | Promise<Database>,
+      tableName: string,
+      { idColumn, dataColumn }?: SQLProviderOptions
+    );
+    init(): Promise<void>;
+    get<V>(id: string, key: string, defaultValue: V): V;
+    set(
+      id: string,
+      key: string,
+      value: any
+    ): Promise<import("sqlite").ISqlite.RunResult<import("sqlite3").Statement>>;
+    delete(
+      id: string,
+      key: string
+    ): Promise<import("sqlite").ISqlite.RunResult<import("sqlite3").Statement>>;
+    clear(
+      id: string
+    ): Promise<import("sqlite").ISqlite.RunResult<import("sqlite3").Statement>>;
+  }
 
   export interface ArgumentOptions {
     id?: string;
@@ -169,6 +169,30 @@ declare module "@kyflx-dev/akairo" {
     | StringResolvable
     | MessageOptions
     | MessageAdditions;
+  export interface SQLProviderOptions {
+    idColumn?: string;
+    dataColumn?: string;
+  }
+  export declare abstract class Provider<T> {
+    items: Collection<string, T>;
+    abstract init(): Promise<any>;
+    abstract get(id: string, key: string, defaultValue?: any): any;
+    abstract set(id: string, key: string, value: any): any;
+    abstract delete(id: string, key: string): any;
+    abstract clear(id: string): any;
+  }
+  export declare class SequelizeProvider<T extends any> extends Provider<T> {
+    table: any;
+    idColumn: string;
+    dataColumn: string;
+    constructor(table: any, { idColumn, dataColumn }?: SQLProviderOptions);
+    init(): Promise<void>;
+    get<V>(id: string, key: string, defaultValue: V): V;
+    set(id: string, key: string, value: any): Promise<boolean>;
+    delete(id: string, key: string): Promise<boolean>;
+    clear(id: string): Promise<boolean>;
+  }
+
   export declare type Modifier<D, T> = (
     ctx?: any,
     text?: Content,
