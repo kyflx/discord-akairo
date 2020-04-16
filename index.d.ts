@@ -1,5 +1,30 @@
 declare module "@kyflx-dev/akairo" {
-  import { BufferResolvable, Channel, Client, ClientOptions, Collection, DMChannel, Emoji, Guild, GuildMember, Message, MessageAdditions, MessageAttachment, MessageEditOptions, MessageEmbed, MessageOptions, PermissionResolvable, Role, Snowflake, StringResolvable, TextChannel, User, UserResolvable, VoiceChannel, VoiceState } from "discord.js";
+  import {
+    BufferResolvable,
+    Channel,
+    Client,
+    ClientOptions,
+    Collection,
+    DMChannel,
+    Emoji,
+    Guild,
+    GuildMember,
+    Message,
+    MessageAdditions,
+    MessageAttachment,
+    MessageEditOptions,
+    MessageEmbed,
+    MessageOptions,
+    PermissionResolvable,
+    Role,
+    Snowflake,
+    StringResolvable,
+    TextChannel,
+    User,
+    UserResolvable,
+    VoiceChannel,
+    VoiceState,
+  } from "discord.js";
   import { EventEmitter } from "events";
   import { Database } from "sqlite";
   import { Stream } from "stream";
@@ -28,6 +53,24 @@ declare module "@kyflx-dev/akairo" {
     clear(
       id: string
     ): Promise<import("sqlite").ISqlite.RunResult<import("sqlite3").Statement>>;
+  }
+
+  export declare class InhibitorHandler extends AkairoHandler<Inhibitor> {
+    constructor(
+      client: AkairoClient,
+      {
+        directory,
+        classToHandle,
+        extensions,
+        automateCategories,
+        loadFilter,
+      }?: AkairoHandlerOptions
+    );
+    test(
+      type: InhibitorType,
+      message: Message,
+      command?: Command
+    ): Promise<string | void>;
   }
 
   export interface ArgumentOptions {
@@ -905,11 +948,11 @@ declare module "@kyflx-dev/akairo" {
     send(
       content?: StringResolvable,
       options?: MessageOptions | MessageAdditions
-    ): Promise<OrArray<Message>>;
+    ): Promise<Message>;
     sendNew(
       content?: StringResolvable,
       options?: MessageOptions | MessageAdditions
-    ): Promise<OrArray<Message>>;
+    ): Promise<Message>;
     /**
      * Sends a response with a mention concantenated to it.
      * @param {StringResolvable} [content=''] - Content to send.
@@ -919,7 +962,7 @@ declare module "@kyflx-dev/akairo" {
     reply(
       content: StringResolvable,
       options?: MessageOptions | MessageAdditions
-    ): Promise<OrArray<Message>>;
+    ): Promise<Message>;
     edit(
       content: StringResolvable,
       options: MessageEditOptions | MessageEmbed

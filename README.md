@@ -2,6 +2,8 @@
 
 This is basically just a fork of [discord-akairo](https://github.com/discord-akairo/discord-akairo) but It's in [Typescript](https://www.typescriptlang.org) and it uses CommandContext for prompts and shit.
 
+- [Kyflx Discord Server](https://discord.gg/BnQECNd)
+
 ## Customization
 
 The only customizable class as of right now is `CommandContext`
