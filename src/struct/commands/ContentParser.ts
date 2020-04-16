@@ -66,15 +66,15 @@ interface TokenizerData {
 }
 
 class Tokenizer {
-  #content: any;
-  #flagWords: string[];
-  #optionFlagWords: string[];
-  #quoted: boolean;
-  #separator: string;
+  public content: any;
+  public flagWords: string[];
+  public optionFlagWords: string[];
+  public quoted: boolean;
+  public separator: string;
 
-  #position: number = 0;
-  #state: number = 0; // 0 -> Default, 1 -> Quotes (""), 2 -> Special Quotes (“”)
-  #tokens: Token[] = [];
+  public position: number = 0;
+  public state: number = 0; // 0 -> Default, 1 -> Quotes (""), 2 -> Special Quotes (“”)
+  public tokens: Token[] = [];
   public constructor(
     content: string,
     {
@@ -84,35 +84,35 @@ class Tokenizer {
       separator,
     }: TokenizerData = {} as TokenizerData
   ) {
-    this.#content = content;
-    this.#flagWords = flagWords;
-    this.#optionFlagWords = optionFlagWords;
-    this.#quoted = quoted;
-    this.#separator = separator;
+    this.content = content;
+    this.flagWords = flagWords;
+    this.optionFlagWords = optionFlagWords;
+    this.quoted = quoted;
+    this.separator = separator;
   }
 
   public startsWith(str: string) {
     return (
-      this.#content
-        .slice(this.#position, this.#position + str.length)
+      this.content
+        .slice(this.position, this.position + str.length)
         .toLowerCase() === str.toLowerCase()
     );
   }
 
   public match(regex: RegExp) {
-    return this.#content.slice(this.#position).match(regex);
+    return this.content.slice(this.position).match(regex);
   }
 
   public slice(from: number, to: number) {
-    return this.#content.slice(this.#position + from, this.#position + to);
+    return this.content.slice(this.position + from, this.position + to);
   }
 
   public addToken(type: string, value: any) {
-    this.#tokens.push({ type, value });
+    this.tokens.push({ type, value });
   }
 
   public advance(n: number) {
-    this.#position += n;
+    this.position += n;
   }
 
   public choice(...actions: Function[]) {
@@ -124,12 +124,12 @@ class Tokenizer {
   }
 
   public tokenize() {
-    while (this.#position < this.#content.length) {
+    while (this.position < this.content.length) {
       this.runOne();
     }
 
     this.addToken("EOF", "");
-    return this.#tokens;
+    return this.tokens;
   }
 
   public runOne() {
@@ -146,8 +146,8 @@ class Tokenizer {
   }
 
   public runFlags() {
-    if (this.#state === 0) {
-      for (const word of this.#flagWords) {
+    if (this.state === 0) {
+      for (const word of this.flagWords) {
         if (this.startsWith(word)) {
           this.addToken("FlagWord", this.slice(0, word.length));
           this.advance(word.length);
@@ -160,8 +160,8 @@ class Tokenizer {
   }
 
   public runOptionFlags() {
-    if (this.#state === 0) {
-      for (const word of this.#optionFlagWords) {
+    if (this.state === 0) {
+      for (const word of this.optionFlagWords) {
         if (this.startsWith(word)) {
           this.addToken("OptionFlagWord", this.slice(0, word.length));
           this.advance(word.length);
@@ -174,11 +174,11 @@ class Tokenizer {
   }
 
   public runQuote() {
-    if (this.#separator == null && this.#quoted && this.startsWith('"')) {
-      if (this.#state === 1) {
-        this.#state = 0;
-      } else if (this.#state === 0) {
-        this.#state = 1;
+    if (this.separator == null && this.quoted && this.startsWith('"')) {
+      if (this.state === 1) {
+        this.state = 0;
+      } else if (this.state === 0) {
+        this.state = 1;
       }
 
       this.addToken("Quote", '"');
@@ -190,9 +190,9 @@ class Tokenizer {
   }
 
   public runOpenQuote() {
-    if (this.#separator == null && this.#quoted && this.startsWith('"')) {
-      if (this.#state === 0) {
-        this.#state = 2;
+    if (this.separator == null && this.quoted && this.startsWith('"')) {
+      if (this.state === 0) {
+        this.state = 2;
       }
 
       this.addToken("OpenQuote", '"');
@@ -204,9 +204,9 @@ class Tokenizer {
   }
 
   public runEndQuote() {
-    if (this.#separator == null && this.#quoted && this.startsWith("”")) {
-      if (this.#state === 2) {
-        this.#state = 0;
+    if (this.separator == null && this.quoted && this.startsWith("”")) {
+      if (this.state === 2) {
+        this.state = 0;
       }
 
       this.addToken("EndQuote", "”");
@@ -218,9 +218,9 @@ class Tokenizer {
   }
 
   public runSeparator() {
-    if (this.#separator != null && this.startsWith(this.#separator)) {
-      this.addToken("Separator", this.slice(0, this.#separator.length));
-      this.advance(this.#separator.length);
+    if (this.separator != null && this.startsWith(this.separator)) {
+      this.addToken("Separator", this.slice(0, this.separator.length));
+      this.advance(this.separator.length);
       return true;
     }
 
@@ -229,16 +229,16 @@ class Tokenizer {
 
   public runWord() {
     const wordRegex =
-      this.#state === 0 ? /^\S+/ : this.#state === 1 ? /^[^\s"]+/ : /^[^\s”]+/;
+      this.state === 0 ? /^\S+/ : this.state === 1 ? /^[^\s"]+/ : /^[^\s”]+/;
 
     const wordMatch = this.match(wordRegex);
     if (wordMatch) {
-      if (this.#separator) {
-        if (wordMatch[0].toLowerCase() === this.#separator.toLowerCase()) {
+      if (this.separator) {
+        if (wordMatch[0].toLowerCase() === this.separator.toLowerCase()) {
           return false;
         }
 
-        const index = wordMatch[0].indexOf(this.#separator);
+        const index = wordMatch[0].indexOf(this.separator);
         if (index === -1) {
           this.addToken("Word", wordMatch[0]);
           this.advance(wordMatch[0].length);
@@ -560,30 +560,3 @@ export class ContentParser {
     return res;
   }
 }
-
-/**
- * Options for the content parser.
- * @typedef {Object} ContentParserOptions
- * @prop {string[]} [flagWords=[]] - Words considered flags.
- * @prop {string[]} [optionFlagWords=[]] - Words considered option flags.
- * @prop {boolean} [quoted=true] - Whether to parse quotes.
- * @prop {string} [separator] - Whether to parse a separator.
- * @private
- */
-
-/**
- * Flags extracted from an argument list.
- * @typedef {Object} ExtractedFlags
- * @prop {string[]} [flagWords=[]] - Words considered flags.
- * @prop {string[]} [optionFlagWords=[]] - Words considered option flags.
- * @private
- */
-
-/**
- * A single phrase or flag.
- * @typedef {Object} StringData
- * @prop {string} type - One of 'Phrase', 'Flag', 'OptionFlag'.
- * @prop {string} raw - The raw string with whitespace and/or separator.
- * @prop {?string} key - The key of a 'Flag' or 'OptionFlag'.
- * @prop {?string} value - The value of a 'Phrase' or 'OptionFlag'.
- */

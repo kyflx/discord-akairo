@@ -207,87 +207,6 @@ declare module "@kyflx-dev/akairo" {
     index: number;
   }
 
-  export declare class ArgumentRunner {
-    command: Command;
-    constructor(command: Command);
-    get client(): import("../..").AkairoClient;
-    get handler(): import("..").CommandHandler;
-    run(
-      ctx: any,
-      parsed: ContentParserResult,
-      generator: ArgumentGenerator
-    ): Promise<any>;
-    runOne(
-      ctx: any,
-      parsed: ContentParserResult,
-      state: ArgumentRunnerState,
-      arg: Argument
-    ): Promise<Flag | any>;
-    runPhrase(
-      ctx: any,
-      parsed: ContentParserResult,
-      state: ArgumentRunnerState,
-      arg: Argument
-    ): Promise<any>;
-    runRest(
-      ctx: any,
-      parsed: ContentParserResult,
-      state: ArgumentRunnerState,
-      arg: Argument
-    ): Promise<Flag | any>;
-    runSeparate(
-      ctx: any,
-      parsed: ContentParserResult,
-      state: ArgumentRunnerState,
-      arg: Argument
-    ): Promise<Flag | any>;
-    runFlag(
-      ctx: any,
-      parsed: ContentParserResult,
-      state: ArgumentRunnerState,
-      arg: Argument
-    ): Promise<Flag | any>;
-    runOption(
-      ctx: any,
-      parsed: ContentParserResult,
-      state: ArgumentRunnerState,
-      arg: Argument
-    ): Promise<Flag | any>;
-    runText(
-      ctx: any,
-      parsed: ContentParserResult,
-      state: ArgumentRunnerState,
-      arg: Argument
-    ): Promise<Flag | any>;
-    runContent(
-      ctx: any,
-      parsed: ContentParserResult,
-      state: ArgumentRunnerState,
-      arg: Argument
-    ): Promise<Flag | any>;
-    runRestContent(
-      ctx: any,
-      parsed: ContentParserResult,
-      state: ArgumentRunnerState,
-      arg: Argument
-    ): Promise<Flag | any>;
-    runNone(
-      ctx: any,
-      parsed: ContentParserResult,
-      state: ArgumentRunnerState,
-      arg: Argument
-    ): Promise<Flag | any>;
-    static increaseIndex(
-      parsed: ContentParserResult,
-      state: ArgumentRunnerState,
-      n?: number
-    ): void;
-    static isShortCircuit(value: any): boolean;
-    static fromArguments(
-      args: [string, Argument][]
-    ): () => IterableIterator<Argument>;
-  }
-
   export declare class Argument {
     command: Command;
     match: ArgumentMatch;
@@ -378,11 +297,6 @@ declare module "@kyflx-dev/akairo" {
     ctx: CommandContext,
     command?: Command
   ) => boolean;
-  export interface CommandDescription {
-    content?: string;
-    usage?: string;
-    examples?: string[];
-  }
   export declare type PermissionSupplier = (
     ctx: CommandContext
   ) => OrPromise<OrArray<PermissionResolvable>>;
@@ -409,9 +323,10 @@ declare module "@kyflx-dev/akairo" {
     ignoreCooldown?: OrArray<string> | IngoreCheckPredicate;
     ignorePermissions?: OrArray<string> | IngoreCheckPredicate;
     argumentDefaults?: DefaultArgumentOptions;
-    description?: CommandDescription;
+    description?: any;
   }
-  export interface Command extends AkairoModule {
+
+  export declare class Command extends AkairoModule {
     aliases: string[];
     channel: "dm" | "guild";
     ownerOnly: boolean;
@@ -420,7 +335,7 @@ declare module "@kyflx-dev/akairo" {
     cooldown: number;
     ratelimit: number;
     argumentDefaults: DefaultArgumentOptions;
-    description: CommandDescription;
+    description: any;
     prefix: OrArray<string> | PrefixSupplier;
     clientPermissions: Permissions;
     userPermissions: Permissions;
@@ -432,30 +347,6 @@ declare module "@kyflx-dev/akairo" {
     before(ctx: CommandContext): OrPromise<boolean>;
     condition(ctx: CommandContext): boolean;
     exec(ctx: CommandContext, args?: Record<string, any>): Promise<any>;
-  }
-  export declare class Command extends AkairoModule {
-    #private;
-    handler: CommandHandler;
-    aliases: string[];
-    channel: "dm" | "guild";
-    ownerOnly: boolean;
-    editable: boolean;
-    typing: boolean;
-    cooldown: number;
-    ratelimit: number;
-    argumentDefaults: DefaultArgumentOptions;
-    description: CommandDescription;
-    prefix: OrArray<string> | PrefixSupplier;
-    clientPermissions: Permissions;
-    userPermissions: Permissions;
-    regex: RegExp | UsesContext<RegExp>;
-    condition: ExecutionPredicate;
-    before: UsesContext<boolean>;
-    lock: KeySupplier;
-    locker: Set<string>;
-    ignoreCooldown: OrArray<string> | IngoreCheckPredicate;
-    ignorePermissions: OrArray<string> | IngoreCheckPredicate;
-    constructor(id: string, options?: CommandOptions);
     parse(message: Message, content: string): Promise<any>;
   }
 

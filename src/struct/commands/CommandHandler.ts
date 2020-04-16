@@ -1,5 +1,12 @@
 import { Channel, Collection, Message, TextChannel, User } from "discord.js";
-import { AkairoError, BuiltInReasons, CommandHandlerEvents, OrArray, OrPromise, Util } from "../../util";
+import {
+  AkairoError,
+  BuiltInReasons,
+  CommandHandlerEvents,
+  OrArray,
+  OrPromise,
+  Util,
+} from "../../util";
 import { AkairoClient } from "../AkairoClient";
 import { AkairoHandler, AkairoHandlerOptions } from "../AkairoHandler";
 import { InhibitorHandler } from "../inhibitors/InhibitorHandler";
@@ -550,25 +557,21 @@ export class CommandHandler extends AkairoHandler<Command> {
       : null;
 
     if (reason != null) {
-      this.emit(
-        CommandHandlerEvents.MESSAGE_BLOCKED,
-        message.util.context,
-        reason
-      );
+      this.emit(CommandHandlerEvents.MESSAGE_BLOCKED, message, reason);
     } else if (this.blockClient && message.author.id === this.client.user.id) {
       this.emit(
         CommandHandlerEvents.MESSAGE_BLOCKED,
-        message.util.context,
+        message,
         BuiltInReasons.CLIENT
       );
     } else if (this.blockBots && message.author.bot) {
       this.emit(
         CommandHandlerEvents.MESSAGE_BLOCKED,
-        message.util.context,
+        message,
         BuiltInReasons.BOT
       );
     } else if (this.hasPrompt(message.channel, message.author)) {
-      this.emit(CommandHandlerEvents.IN_PROMPT, message.util.context);
+      this.emit(CommandHandlerEvents.IN_PROMPT, message);
     } else {
       return false;
     }
@@ -582,11 +585,7 @@ export class CommandHandler extends AkairoHandler<Command> {
       : null;
 
     if (reason != null) {
-      this.emit(
-        CommandHandlerEvents.MESSAGE_BLOCKED,
-        message.util.context,
-        reason
-      );
+      this.emit(CommandHandlerEvents.MESSAGE_BLOCKED, message, reason);
     } else {
       return false;
     }
@@ -603,7 +602,7 @@ export class CommandHandler extends AkairoHandler<Command> {
       if (!isOwner) {
         this.emit(
           CommandHandlerEvents.COMMAND_BLOCKED,
-          message.util.context,
+          message,
           command,
           BuiltInReasons.OWNER
         );
@@ -614,7 +613,7 @@ export class CommandHandler extends AkairoHandler<Command> {
     if (command.channel === "guild" && !message.guild) {
       this.emit(
         CommandHandlerEvents.COMMAND_BLOCKED,
-        message.util.context,
+        message,
         command,
         BuiltInReasons.GUILD
       );
@@ -624,7 +623,7 @@ export class CommandHandler extends AkairoHandler<Command> {
     if (command.channel === "dm" && message.guild) {
       this.emit(
         CommandHandlerEvents.COMMAND_BLOCKED,
-        message.util.context,
+        message,
         command,
         BuiltInReasons.DM
       );
@@ -640,12 +639,7 @@ export class CommandHandler extends AkairoHandler<Command> {
       : null;
 
     if (reason != null) {
-      this.emit(
-        CommandHandlerEvents.COMMAND_BLOCKED,
-        message.util.context,
-        command,
-        reason
-      );
+      this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, reason);
       return true;
     }
 
@@ -674,7 +668,7 @@ export class CommandHandler extends AkairoHandler<Command> {
         if (missing != null) {
           this.emit(
             CommandHandlerEvents.MISSING_PERMISSIONS,
-            message.util.context,
+            message,
             command,
             "client",
             missing
@@ -688,7 +682,7 @@ export class CommandHandler extends AkairoHandler<Command> {
         if (missing.length) {
           this.emit(
             CommandHandlerEvents.MISSING_PERMISSIONS,
-            message.util.context,
+            message,
             command,
             "client",
             missing
@@ -714,7 +708,7 @@ export class CommandHandler extends AkairoHandler<Command> {
           if (missing != null) {
             this.emit(
               CommandHandlerEvents.MISSING_PERMISSIONS,
-              message.util.context,
+              message,
               command,
               "user",
               missing
@@ -728,7 +722,7 @@ export class CommandHandler extends AkairoHandler<Command> {
           if (missing.length) {
             this.emit(
               CommandHandlerEvents.MISSING_PERMISSIONS,
-              message.util.context,
+              message,
               command,
               "user",
               missing
@@ -979,7 +973,9 @@ export class CommandHandler extends AkairoHandler<Command> {
     return this.modules.get(this.aliases.get(name.toLowerCase()));
   }
 
-  public useInhibitorHandler(inhibitorHandler: InhibitorHandler): CommandHandler {
+  public useInhibitorHandler(
+    inhibitorHandler: InhibitorHandler
+  ): CommandHandler {
     this.inhibitorHandler = inhibitorHandler;
     this.resolver.inhibitorHandler = inhibitorHandler;
 
