@@ -21,11 +21,6 @@ export abstract class Structures {
     );
   }
 
-  /**
-   * Retrieves a structure class.
-   * @param {string} structure Name of the structure to retrieve
-   * @returns {Function}
-   */
   static get<K extends keyof Extandables>(structure: K): Extandables[K] {
     if (typeof structure === "string") return structures[structure];
     throw new TypeError(
@@ -33,28 +28,6 @@ export abstract class Structures {
     );
   }
 
-  /**
-   * Extends a structure.
-   * <warn> Make sure to extend all structures before instantiating your client.
-   * Extending after doing so may not work as expected. </warn>
-   * @param {ExtendableStructure} structure Name of the structure class to extend
-   * @param {Function} extender Function that takes the base class to extend as its only parameter and returns the
-   * extended class/prototype
-   * @returns {Function} Extended class/prototype returned from the extender
-   * @example
-   * const { Structures } = require('discord.js');
-   *
-   * Structures.extend('Guild', Guild => {
-   *   class CoolGuild extends Guild {
-   *     constructor(client, data) {
-   *       super(client, data);
-   *       this.cool = true;
-   *     }
-   *   }
-   *
-   *   return CoolGuild;
-   * });
-   */
   static extend<K extends keyof Extandables, T extends Extandables[K]>(
     structure: K,
     extender: (base: Extandables[K]) => T

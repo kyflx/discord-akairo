@@ -42,7 +42,6 @@ export interface CommandHandlerOptions extends AkairoHandlerOptions {
   argumentDefaults?: DefaultArgumentOptions;
   blockBots?: boolean;
   blockClient?: boolean;
-  commandUtil?: boolean;
   commandUtilLifetime?: number;
   commandUtilSweepInterval?: number;
   defaultCooldown?: number;
@@ -54,12 +53,6 @@ export interface CommandHandlerOptions extends AkairoHandlerOptions {
   storeMessages?: boolean;
 }
 
-/**
- * Loads commands and handles messages.
- * @param {AkairoClient} client - The Akairo client.
- * @param {CommandHandlerOptions} options - Options.
- * @extends {AkairoHandler}
- */
 export class CommandHandler extends AkairoHandler<Command> {
   public resolver: TypeResolver = new TypeResolver(this);
   public aliases: Collection<string, string> = new Collection();
@@ -81,7 +74,7 @@ export class CommandHandler extends AkairoHandler<Command> {
   public fetchMembers: boolean;
   public handleEdits: boolean;
   public storeMessages: boolean;
-  public commandUtil: boolean;
+  public commandUtil = true;
   public commandUtilLifetime: number;
   public commandUtilSweepInterval: number;
   public defaultCooldown: number;
@@ -104,7 +97,6 @@ export class CommandHandler extends AkairoHandler<Command> {
       fetchMembers = false,
       handleEdits = false,
       storeMessages = false,
-      commandUtil,
       commandUtilLifetime = 3e5,
       commandUtilSweepInterval = 3e5,
       defaultCooldown = 0,
@@ -134,13 +126,8 @@ export class CommandHandler extends AkairoHandler<Command> {
 
     this.handleEdits = Boolean(handleEdits);
 
-    /**
-     * Whether or not to store messages in CommandUtil.
-     * @type {boolean}
-     */
     this.storeMessages = Boolean(storeMessages);
 
-    this.commandUtil = Boolean(commandUtil);
     if ((this.handleEdits || this.storeMessages) && !this.commandUtil) {
       throw new AkairoError("COMMAND_UTIL_EXPLICIT");
     }
@@ -276,11 +263,6 @@ export class CommandHandler extends AkairoHandler<Command> {
     }
   }
 
-  /**
-   * Deregisters a module.
-   * @param {Command} command - Module to use.
-   * @returns {void}
-   */
   public deregister(command: Command): void {
     for (let alias of command.aliases) {
       alias = alias.toLowerCase();
@@ -330,13 +312,11 @@ export class CommandHandler extends AkairoHandler<Command> {
         return false;
       }
 
-      if (this.commandUtil) {
-        if (this.commandUtils.has(message.id)) {
-          message.util = this.commandUtils.get(message.id);
-        } else {
-          message.util = new CommandUtil(this, message);
-          this.commandUtils.set(message.id, message.util);
-        }
+      if (this.commandUtils.has(message.id)) {
+        message.util = this.commandUtils.get(message.id);
+      } else {
+        message.util = new CommandUtil(this, message);
+        this.commandUtils.set(message.id, message.util);
       }
 
       if (await this.runPreTypeInhibitors(message)) {
@@ -381,14 +361,6 @@ export class CommandHandler extends AkairoHandler<Command> {
     }
   }
 
-  /**
-   * Handles normal commands.
-   * @param {Message} message - Message to handle.
-   * @param {string} content - Content of message without command.
-   * @param {Command} command - Command instance.
-   * @param {boolean} [ignore=false] - Ignore inhibitors and other checks.
-   * @returns {Promise<?boolean>}
-   */
   async handleDirectCommand(
     message: Message,
     content: string,
@@ -650,12 +622,6 @@ export class CommandHandler extends AkairoHandler<Command> {
     return false;
   }
 
-  /**
-   * Runs permission checks.
-   * @param {Message} message - Message that called the command.
-   * @param {Command} command - Command to cooldown.
-   * @returns {Promise<boolean>}
-   */
   public async runPermissionChecks(
     message: Message,
     command: Command
@@ -784,13 +750,6 @@ export class CommandHandler extends AkairoHandler<Command> {
     return false;
   }
 
-  /**
-   * Runs a command.
-   * @param {Message} message - Message to handle.
-   * @param {Command} command - Command to handle.
-   * @param {any} args - Arguments to use.
-   * @returns {Promise<void>}
-   */
   async runCommand(
     message: Message,
     command: Command,
@@ -839,11 +798,6 @@ export class CommandHandler extends AkairoHandler<Command> {
     );
   }
 
-  /**
-   * Parses the command and its argument list using prefix overwrites.
-   * @param {Message} message - Message that called the command.
-   * @returns {Promise<ParsedComponentData>}
-   */
   public async parseCommandOverwrittenPrefixes(
     message: Message
   ): Promise<ParsedComponentData> {
@@ -929,9 +883,6 @@ export class CommandHandler extends AkairoHandler<Command> {
     throw err;
   }
 
-  /**
-   * Sweep command util instances from cache and returns amount sweeped.
-   */
   public sweepCommandUtil(lifetime: number = this.commandUtilLifetime): number {
     let count = 0;
     for (const commandUtil of this.commandUtils.values()) {

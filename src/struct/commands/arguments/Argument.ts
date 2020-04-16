@@ -67,25 +67,81 @@ export interface DefaultArgumentOptions {
   modifyOtherwise?: Supplier<FailureData, Content>;
 }
 
-export type ArgumentMatch = 'phrase' | 'flag' | 'option' | 'rest' | 'separate' | 'text' | 'content' | 'restContent' | 'none';
+export type ArgumentMatch =
+  | "phrase"
+  | "flag"
+  | "option"
+  | "rest"
+  | "separate"
+  | "text"
+  | "content"
+  | "restContent"
+  | "none";
 export type ArgumentType =
-  | "string" | "lowercase" | "uppercase" | "charCodes"
-  | "number" | "integer" | "bigint" | "emojint"
-  | "url" | "date" | "color"
-  | "user" | "users" | "member" | "members" | "relevant" | "relevants"
-  | "channel" | "channels" | "textChannel" | "textChannels" | "voiceChannel" | "voiceChannels" | "categoryChannel" | "categoryChannels" | "newsChannel" | "newsChannels" | "storeChannel" | "storeChannels"
-  | 'role' | 'roles' | 'emoji' | 'emojis' | 'guild' | 'guilds'
-  | 'message' | 'guildMessage' | 'relevantMessage' | 'invite'
-  | 'userMention' | 'memberMention' | 'channelMention' | 'roleMention' | 'emojiMention'
-  | 'commandAlias' | 'command' | 'inhibitor' | 'listener'
+  | "string"
+  | "lowercase"
+  | "uppercase"
+  | "charCodes"
+  | "number"
+  | "integer"
+  | "bigint"
+  | "emojint"
+  | "url"
+  | "date"
+  | "color"
+  | "user"
+  | "users"
+  | "member"
+  | "members"
+  | "relevant"
+  | "relevants"
+  | "channel"
+  | "channels"
+  | "textChannel"
+  | "textChannels"
+  | "voiceChannel"
+  | "voiceChannels"
+  | "categoryChannel"
+  | "categoryChannels"
+  | "newsChannel"
+  | "newsChannels"
+  | "storeChannel"
+  | "storeChannels"
+  | "role"
+  | "roles"
+  | "emoji"
+  | "emojis"
+  | "guild"
+  | "guilds"
+  | "message"
+  | "guildMessage"
+  | "relevantMessage"
+  | "invite"
+  | "userMention"
+  | "memberMention"
+  | "channelMention"
+  | "roleMention"
+  | "emojiMention"
+  | "commandAlias"
+  | "command"
+  | "inhibitor"
+  | "listener"
   | (string | string[])[]
   | RegExp
   | string;
 export type Content = StringResolvable | MessageOptions | MessageAdditions;
-export type Modifier<D, T> = (ctx?: any, text?: Content, data?: D) => T | Promise<T>;
+export type Modifier<D, T> = (
+  ctx?: any,
+  text?: Content,
+  data?: D
+) => T | Promise<T>;
 export type Supplier<D, T> = (ctx?: any, data?: D) => T | Promise<T>;
 export type ArgumentTypeCaster = (ctx?: any, value?: any) => any;
-export type ParsedValuePredicate = (ctx?: any, phrase?: string, value?: any) => boolean;
+export type ParsedValuePredicate = (
+  ctx?: any,
+  phrase?: string,
+  value?: any
+) => boolean;
 
 export class Argument {
   public match: ArgumentMatch;
@@ -101,7 +157,7 @@ export class Argument {
   private modifyOtherwise: Modifier<FailureData, Content>;
 
   constructor(
-    public command: Command, 
+    public command: Command,
     {
       match = ArgumentMatches.PHRASE,
       type = ArgumentTypes.STRING,
@@ -141,9 +197,6 @@ export class Argument {
     return this.command.handler;
   }
 
-  /**
-   * Processes the type casting and prompting of the argument for a phrase.
-   */
   public async process(message: Message, phrase: string): Promise<Flag | any> {
     const commandDefs = this.command.argumentDefaults;
     const handlerDefs = this.handler.argumentDefaults;
@@ -166,10 +219,14 @@ export class Argument {
         handlerDefs.modifyOtherwise
       );
 
-      let text = await Util.intoCallable(otherwise).call(this, message.util.context, {
-        phrase,
-        failure,
-      });
+      let text = await Util.intoCallable(otherwise).call(
+        this,
+        message.util.context,
+        {
+          phrase,
+          failure,
+        }
+      );
       if (Array.isArray(text)) {
         text = text.join("\n");
       }
@@ -215,22 +272,19 @@ export class Argument {
 
       return this.default == null
         ? res
-        : Util.intoCallable(this.default)(message.util.context, { phrase, failure: res });
+        : Util.intoCallable(this.default)(message.util.context, {
+            phrase,
+            failure: res,
+          });
     }
 
     return res;
   }
 
-  /**
-   * Casts a phrase to this argument's type.
-   */
   public cast(message: Message, phrase: string): Promise<any> {
     return Argument.cast(this.type, this.handler.resolver, message, phrase);
   }
 
-  /**
-   * Collects input from the user by prompting.
-   */
   public async collect(
     message: Message,
     commandInput: string = "",
@@ -255,13 +309,17 @@ export class Argument {
       inputPhrase: string,
       inputParsed: any
     ) => {
-      let text = await Util.intoCallable(prompter).call(this, message.util.context, {
-        retries: retryCount,
-        infinite: isInfinite,
-        message: inputMessage,
-        phrase: inputPhrase,
-        failure: inputParsed,
-      });
+      let text = await Util.intoCallable(prompter).call(
+        this,
+        message.util.context,
+        {
+          retries: retryCount,
+          infinite: isInfinite,
+          message: inputMessage,
+          phrase: inputPhrase,
+          failure: inputParsed,
+        }
+      );
 
       if (Array.isArray(text)) {
         text = text.join("\n");
@@ -437,9 +495,6 @@ export class Argument {
     return returnValue;
   }
 
-  /**
-   * Casts a phrase to the specified type.
-   */
   public static async cast(
     type: ArgumentType | ArgumentTypeCaster,
     resolver: TypeResolver,
@@ -492,11 +547,6 @@ export class Argument {
     return phrase || null;
   }
 
-  /* eslint-disable no-invalid-this */
-  /**
-   * Creates a type from multiple types (union type).
-   * The first type that resolves to a non-void value is used.
-   */
   public static union(
     ...types: (ArgumentType | ArgumentTypeCaster)[]
   ): ArgumentTypeCaster {
@@ -516,10 +566,6 @@ export class Argument {
     };
   }
 
-  /**
-   * Creates a type from multiple types (product type).
-   * Only inputs where each type resolves with a non-void value are valid.
-   */
   public static product(
     ...types: (ArgumentType | ArgumentTypeCaster)[]
   ): ArgumentTypeCaster {
@@ -541,10 +587,6 @@ export class Argument {
     };
   }
 
-  /**
-   * Creates a type with extra validation.
-   * If the predicate is not true, the value is considered invalid.
-   */
   public static validate(
     type: ArgumentType | ArgumentTypeCaster,
     predicate: ParsedValuePredicate
@@ -563,9 +605,6 @@ export class Argument {
     };
   }
 
-  /**
-   * Creates a type where the parsed value must be within a range.
-   */
   public static range(
     type: ArgumentType | ArgumentTypeCaster,
     min: number,
@@ -586,10 +625,6 @@ export class Argument {
     });
   }
 
-  /**
-   * Creates a type that is the left-to-right composition of the given types.
-   * If any of the types fails, the entire composition fails.
-   */
   public static compose(
     ...types: (ArgumentType | ArgumentTypeCaster)[]
   ): ArgumentTypeCaster {
@@ -605,10 +640,6 @@ export class Argument {
     };
   }
 
-  /**
-   * Creates a type that is the left-to-right composition of the given types.
-   * If any of the types fails, the composition still continues with the failure passed on.
-   */
   public static composeWithFailure(
     ...types: (ArgumentType | ArgumentTypeCaster)[]
   ): ArgumentTypeCaster {
@@ -623,10 +654,6 @@ export class Argument {
     };
   }
 
-  /**
-   * Creates a type that parses as normal but also carries the original input.
-   * Result is in an object `{ input, value }` and wrapped in `Flag.fail` when failed.
-   */
   public static withInput(
     type: ArgumentType | ArgumentTypeCaster
   ): ArgumentTypeCaster {
@@ -646,10 +673,6 @@ export class Argument {
     };
   }
 
-  /**
-   * Creates a type that parses as normal but also tags it with some data.
-   * Result is in an object `{ tag, value }` and wrapped in `Flag.fail` when failed.
-   */
   public static tagged(
     type: ArgumentType | ArgumentTypeCaster,
     tag = type
@@ -670,10 +693,6 @@ export class Argument {
     };
   }
 
-  /**
-   * Creates a type that parses as normal but also tags it with some data and carries the original input.
-   * Result is in an object `{ tag, input, value }` and wrapped in `Flag.fail` when failed.
-   */
   public static taggedWithInput(
     type: ArgumentType | ArgumentTypeCaster,
     tag = type

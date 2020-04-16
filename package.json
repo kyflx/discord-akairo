@@ -1,9 +1,9 @@
 {
   "name": "@kyflx-dev/akairo",
-  "version": "1.0.8",
-  "description": "A highly customizable bot framework for Discord.js.",
+  "version": "1.0.9",
+  "description": "A fork of akairo but made in Typescript.",
   "main": "./build/index.js",
-  "types": "./index.d.ts",
+  "types": "./types.d.ts",
   "author": "melike2d",
   "license": "MIT",
   "keywords": [
@@ -41,8 +41,5 @@
   "bugs": {
     "url": "https://github.com/kyflx/discord-akairo/issues"
   },
-  "homepage": "https://github.com/kyflx/discord-akairo",
-  "publishConfig": {
-    "access": "public"
-  }
+  "homepage": "https://github.com/kyflx/discord-akairo"
 }

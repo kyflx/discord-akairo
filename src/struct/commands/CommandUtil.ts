@@ -94,12 +94,6 @@ export class CommandUtil {
     return sent;
   }
 
-  /**
-   * Sends a response with a mention concantenated to it.
-   * @param {StringResolvable} [content=''] - Content to send.
-   * @param {MessageOptions|MessageAdditions} [options={}] - Options to use.
-   * @returns {Promise<Message|Message[]>}
-   */
   public reply(
     content: StringResolvable,
     options?: MessageOptions | MessageAdditions

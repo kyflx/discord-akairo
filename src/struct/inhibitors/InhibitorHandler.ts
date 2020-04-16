@@ -38,10 +38,6 @@ export class InhibitorHandler extends AkairoHandler<Inhibitor> {
     });
   }
 
-  /**
-   * Tests inhibitors against the message.
-   * Returns the reason if blocked.
-   */
   public async test(
     type: InhibitorType,
     message: Message,

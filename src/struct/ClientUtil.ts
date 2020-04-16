@@ -338,10 +338,6 @@ export class ClientUtil {
     return resolved;
   }
 
-  /**
-   * Compares two member objects presences and checks if they stopped or started a stream or not.
-   * Returns `0`, `1`, or `2` for no change, stopped, or started.
-   */
   public compareStreaming(
     oldMember: GuildMember,
     newMember: GuildMember

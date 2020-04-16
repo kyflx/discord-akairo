@@ -33,13 +33,7 @@ export class Inhibitor extends AkairoModule {
     this.priority = priority;
   }
 
-  /**
-   * Checks if message should be blocked.
-   * A return value of true will block the message.
-   * If returning a Promise, a resolved value of true will block the message.
-   */
   public exec(message: Message, command?: Command): Promise<boolean> | boolean {
     throw new AkairoError("NOT_IMPLEMENTED", this.constructor.name, "exec");
   }
 }
-

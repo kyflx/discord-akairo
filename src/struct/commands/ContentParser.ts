@@ -529,11 +529,6 @@ export class ContentParser {
     return new Parser(tokens, { separated: this.separator != null }).parse();
   }
 
-  /**
-   * Extracts the flags from argument options.
-   * @param {ArgumentOptions[]} args - Argument options.
-   * @returns {ExtractedFlags}
-   */
   static getFlags(args: ArgumentOptions[]) {
     const res: Record<string, string[]> = {
       flagWords: [],

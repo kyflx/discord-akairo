@@ -5,7 +5,7 @@ export interface SQLProviderOptions {
   dataColumn?: string;
 }
 
-export abstract class Provider<T> {
+export abstract class Provider<T extends any> {
   public items: Collection<string, T> = new Collection();
 
   public abstract init(): Promise<any>;

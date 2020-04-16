@@ -6,7 +6,7 @@ export * from "./struct";
 export * from "./util";
 
 declare module "discord.js" {
-  interface Message {
+  export interface Message {
     util: CommandUtil;
     edited: boolean;
   }
