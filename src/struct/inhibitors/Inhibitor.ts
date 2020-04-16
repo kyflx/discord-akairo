@@ -3,6 +3,7 @@ import { Message } from "discord.js";
 import { InhibitorHandler } from "./InhibitorHandler";
 import { Command } from "../commands/Command";
 import { AkairoError } from "../../util";
+import { CommandContext } from "../commands";
 
 export type InhibitorType = "all" | "pre" | "post";
 export interface InhibitorOptions extends AkairoModuleOptions {
@@ -33,7 +34,7 @@ export class Inhibitor extends AkairoModule {
     this.priority = priority;
   }
 
-  public exec(message: Message, command?: Command): Promise<boolean> | boolean {
+  public exec(message: Message | CommandContext, command?: Command): Promise<boolean> | boolean {
     throw new AkairoError("NOT_IMPLEMENTED", this.constructor.name, "exec");
   }
 }

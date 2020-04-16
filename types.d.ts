@@ -36,13 +36,6 @@ declare module "@kyflx-dev/akairo" {
     public static extend<K extends keyof Extandables, T extends Extandables[K]>(structure: K, extender: (base: Extandables[K]) => T): T;
   }
 
-  module "discord.js" {
-    export interface Message {
-      util: CommandUtil;
-      edited: boolean;
-    }
-  }
-
   /** Arbys: We Have the Meats */
   export interface SQLProviderOptions {
     idColumn?: string;
@@ -293,7 +286,7 @@ declare module "@kyflx-dev/akairo" {
     public type: InhibitorType;
     public priority: number;
     public constructor(id: string, options?: InhibitorOptions);
-    public exec(message: Message, command?: Command): Promise<boolean> | boolean;
+    public exec(ctx: Message | CommandContext, command?: Command): Promise<boolean> | boolean;
   }
 
   export declare class InhibitorHandler extends AkairoHandler<Inhibitor> {

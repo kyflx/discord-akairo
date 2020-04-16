@@ -53,7 +53,7 @@ export class InhibitorHandler extends AkairoHandler<Inhibitor> {
     for (const inhibitor of inhibitors.values()) {
       promises.push(
         (async () => {
-          let inhibited = inhibitor.exec(message, command);
+          let inhibited = inhibitor.exec(["pre", "post"].includes(type) ? message.util.context : message, command);
           if (Util.isPromise(inhibited)) inhibited = await inhibited;
           if (inhibited) return inhibitor;
           return null;
