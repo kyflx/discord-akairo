@@ -21,6 +21,7 @@ declare module "@kyflx-dev/akairo" {
     User,
     VoiceChannel,
     VoiceState,
+    Client
   } from "discord.js";
   import { EventEmitter } from "events";
   import { ISqlite, Statement } from "sqlite";
@@ -159,7 +160,7 @@ declare module "@kyflx-dev/akairo" {
     public handler: CommandHandler;
     public ratelimit: number;
     public argumentDefaults: DefaultArgumentOptions;
-    public description: CommandDescription;
+    public description: any;
     public prefix: OrArray<string> | PrefixSupplier;
     public clientPermissions: Permissions;
     public userPermissions: Permissions;
@@ -562,12 +563,6 @@ declare module "@kyflx-dev/akairo" {
     modifyCancel?: Modifier<ArgumentPromptData, Content>;
   }
   
-  export interface CommandDescription {
-    content?: string;
-    usage?: string;
-    examples?: string[];
-  }
-
   export interface CommandOptions extends AkairoModuleOptions {
     aliases?: string[];
     args?: ArgumentOptions[] | ArgumentGenerator;
@@ -591,7 +586,7 @@ declare module "@kyflx-dev/akairo" {
     ignoreCooldown?: OrArray<string> | IngoreCheckPredicate;
     ignorePermissions?: OrArray<string> | IngoreCheckPredicate;
     argumentDefaults?: DefaultArgumentOptions;
-    description?: CommandDescription;
+    description?: any;
   }
 
   export interface ContentParserOptions {
