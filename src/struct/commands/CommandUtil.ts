@@ -20,7 +20,7 @@ export class CommandUtil {
   public lastResponse?: Message;
   public messages?: Collection<string, Message>;
   public command: Command;
-  public context: CommandContext = new (Structures.get("CommandContext"))(this);;
+  public context: CommandContext = new (Structures.get("CommandContext"))(this);
   constructor(public handler: CommandHandler, public message: Message) {
     this.messages = this.handler.storeMessages ? new Collection() : null;
     this.context._fix(message);
@@ -37,14 +37,14 @@ export class CommandUtil {
   }
 
   public addMessage(message: OrArray<Message>): OrArray<Message> {
-    if (this.handler.storeMessages) {
-      if (Array.isArray(message)) {
-        for (const msg of message) {
-          this.messages.set(msg.id, msg);
-        }
-      } else {
-        this.messages.set(message.id, message);
+    if (Array.isArray(message)) {
+      for (const msg of message) {
+        Object.defineProperty(msg, "util", { value: this });
+        if (this.handler.storeMessages) this.messages.set(msg.id, msg);
       }
+    } else {
+      Object.defineProperty(message, "util", { value: this });
+      if (this.handler.storeMessages) this.messages.set(message.id, message);
     }
 
     return message;

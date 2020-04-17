@@ -395,7 +395,7 @@ export class Argument {
           )
         ).first();
 
-        if (message.util) message.util.addMessage(input);
+        message.util.addMessage(input);
       } catch (err) {
         const timeoutText = await getText(
           "timeout",
@@ -407,7 +407,7 @@ export class Argument {
         );
         if (timeoutText) {
           const sentTimeout = await message.channel.send(timeoutText);
-          if (message.util) message.util.addMessage(sentTimeout);
+          message.util.addMessage(sentTimeout);
         }
 
         return Flag.cancel();

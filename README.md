@@ -6,7 +6,7 @@ This is basically just a fork of [discord-akairo](https://github.com/discord-aka
 
 ## Caveats
 
-If you for some reason want to use this in an already pretty large discord bot... don't lol, fork this and remove the command context stuff. But if you do here are some caveats:
+If you for some reason want to use this in an already pretty large discord bot... don't lol, fork this and remove the command context stuff. But here are the caveats
 
 - Said Context
   - You have to use a `CommandContext` class instead of a traditional discord.js `Message` class for commands and prompts.
@@ -44,7 +44,7 @@ declare module "@kyflx-dev/akairo" {
 
 ## Installation
 
-We do **not** provide support for this package as it was made for Kyflx.
+We do **not** provide support for this package as it was made for [Kyflx].
 
 ```bash
 $ npm install @kyflx-dev/akairo
