@@ -1,11 +1,14 @@
+import { Message } from "discord.js";
+
 import { ArgumentMatches, AkairoError } from "../../../util";
 import { ContentParserResult } from "../ContentParser";
 import { Flag } from "../Flag";
 import { Argument, ArgumentOptions } from "./Argument";
 import { Command } from "../Command";
+import { CommandContext } from "../CommandContext";
 
 export type ArgumentGenerator = (
-  ctx: any,
+  ctx: CommandContext,
   parsed: ContentParserResult,
   state: ArgumentRunnerState
 ) => IterableIterator<ArgumentOptions | Flag>;
@@ -27,7 +30,7 @@ export class ArgumentRunner {
   }
 
   public async run(
-    ctx: any,
+    message: Message,
     parsed: ContentParserResult,
     generator: ArgumentGenerator
   ) {
@@ -46,7 +49,7 @@ export class ArgumentRunner {
       }
     };
 
-    const iter = generator(ctx, parsed, state);
+    const iter = generator(message.util.context, parsed, state);
     let curr = await iter.next();
     while (!curr.done) {
       const value = curr.value;
@@ -56,7 +59,7 @@ export class ArgumentRunner {
       }
 
       const res = await this.runOne(
-        ctx,
+        message,
         parsed,
         state,
         new Argument(this.command, value)
@@ -74,7 +77,7 @@ export class ArgumentRunner {
   }
 
   public runOne(
-    ctx: any,
+    message: Message,
     parsed: ContentParserResult,
     state: ArgumentRunnerState,
     arg: Argument
@@ -96,11 +99,11 @@ export class ArgumentRunner {
       throw new AkairoError("UNKNOWN_MATCH_TYPE", arg.match);
     }
 
-    return runFn.call(this, ctx, parsed, state, arg);
+    return runFn.call(this, message, parsed, state, arg);
   }
 
   public async runPhrase(
-    ctx: any,
+    message: Message,
     parsed: ContentParserResult,
     state: ArgumentRunnerState,
     arg: Argument
@@ -120,7 +123,7 @@ export class ArgumentRunner {
 
         const phrase = parsed.phrases[i] ? parsed.phrases[i].value : "";
         // `cast` is used instead of `process` since we do not want prompts.
-        const res = await arg.cast(ctx, phrase);
+        const res = await arg.cast(message, phrase);
         if (res != null) {
           state.usedIndices.add(i);
           return res;
@@ -128,12 +131,12 @@ export class ArgumentRunner {
       }
 
       // No indices matched.
-      return arg.process(ctx, "");
+      return arg.process(message, "");
     }
 
     const index = arg.index == null ? state.phraseIndex : arg.index;
     const ret = arg.process(
-      ctx,
+      message,
       parsed.phrases[index] ? parsed.phrases[index].value : ""
     );
     if (arg.index == null) {
@@ -144,7 +147,7 @@ export class ArgumentRunner {
   }
 
   public async runRest(
-    ctx: any,
+    message: Message,
     parsed: ContentParserResult,
     state: ArgumentRunnerState,
     arg: Argument
@@ -155,7 +158,7 @@ export class ArgumentRunner {
       .map((x) => x.raw)
       .join("")
       .trim();
-    const ret = await arg.process(ctx, rest);
+    const ret = await arg.process(message, rest);
     if (arg.index == null) {
       ArgumentRunner.increaseIndex(parsed, state);
     }
@@ -164,7 +167,7 @@ export class ArgumentRunner {
   }
 
   async runSeparate(
-    ctx: any,
+    message: Message,
     parsed: ContentParserResult,
     state: ArgumentRunnerState,
     arg: Argument
@@ -172,7 +175,7 @@ export class ArgumentRunner {
     const index = arg.index == null ? state.phraseIndex : arg.index;
     const phrases = parsed.phrases.slice(index, index + arg.limit);
     if (!phrases.length) {
-      const ret = await arg.process(ctx, "");
+      const ret = await arg.process(message, "");
       if (arg.index != null) {
         ArgumentRunner.increaseIndex(parsed, state);
       }
@@ -182,7 +185,7 @@ export class ArgumentRunner {
 
     const res = [];
     for (const phrase of phrases) {
-      res.push(await arg.process(ctx, phrase.value));
+      res.push(await arg.process(message, phrase.value));
     }
 
     if (arg.index != null) {
@@ -193,7 +196,7 @@ export class ArgumentRunner {
   }
 
   public async runFlag(
-    ctx: any,
+    message: Message,
     parsed: ContentParserResult,
     state: ArgumentRunnerState,
     arg: Argument
@@ -215,7 +218,7 @@ export class ArgumentRunner {
   }
 
   async runOption(
-    ctx: any,
+    message: Message,
     parsed: ContentParserResult,
     state: ArgumentRunnerState,
     arg: Argument
@@ -231,7 +234,7 @@ export class ArgumentRunner {
 
       const res = [];
       for (const value of values) {
-        res.push(await arg.process(ctx, value));
+        res.push(await arg.process(message, value));
       }
 
       return res;
@@ -241,11 +244,11 @@ export class ArgumentRunner {
       names.some((name) => name.toLowerCase() === flag.key.toLowerCase())
     );
 
-    return arg.process(ctx, foundFlag != null ? foundFlag.value : "");
+    return arg.process(message, foundFlag != null ? foundFlag.value : "");
   }
 
   public runText(
-    ctx: any,
+    message: Message,
     parsed: ContentParserResult,
     state: ArgumentRunnerState,
     arg: Argument
@@ -256,11 +259,11 @@ export class ArgumentRunner {
       .map((x) => x.raw)
       .join("")
       .trim();
-    return arg.process(ctx, text);
+    return arg.process(message, text);
   }
 
   public runContent(
-    ctx: any,
+    message: Message,
     parsed: ContentParserResult,
     state: ArgumentRunnerState,
     arg: Argument
@@ -271,11 +274,11 @@ export class ArgumentRunner {
       .map((x) => x.raw)
       .join("")
       .trim();
-    return arg.process(ctx, content);
+    return arg.process(message, content);
   }
 
   public async runRestContent(
-    ctx: any,
+    message: Message,
     parsed: ContentParserResult,
     state: ArgumentRunnerState,
     arg: Argument
@@ -286,7 +289,7 @@ export class ArgumentRunner {
       .map((x) => x.raw)
       .join("")
       .trim();
-    const ret = await arg.process(ctx, rest);
+    const ret = await arg.process(message, rest);
     if (arg.index == null) {
       ArgumentRunner.increaseIndex(parsed, state);
     }
@@ -295,12 +298,12 @@ export class ArgumentRunner {
   }
 
   public runNone(
-    ctx: any,
+    message: Message,
     parsed: ContentParserResult,
     state: ArgumentRunnerState,
     arg: Argument
   ): Promise<Flag | any> {
-    return arg.process(ctx, "");
+    return arg.process(message, "");
   }
 
   public static increaseIndex(
