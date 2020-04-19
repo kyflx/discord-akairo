@@ -1,6 +1,6 @@
 {
   "name": "@kyflx-dev/akairo",
-  "version": "1.0.13",
+  "version": "1.0.14",
   "description": "A fork of akairo but made in Typescript.",
   "main": "./build/index.js",
   "types": "./types.d.ts",
