@@ -319,6 +319,8 @@ export class CommandHandler extends AkairoHandler<Command> {
         this.commandUtils.set(message.id, message.util);
       }
 
+      await message.util.context._fix(message);
+
       if (await this.runPreTypeInhibitors(message)) {
         return false;
       }

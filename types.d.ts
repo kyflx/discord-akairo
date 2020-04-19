@@ -273,7 +273,7 @@ declare module "@kyflx-dev/akairo" {
     public static cancel(): Flag;
     public static retry(message: Message): Flag;
     public static fail(value: any): Flag;
-    public static continue(command: Command, ignore?: boolean, rest?: string): Flag;
+    public static continue(command: string, ignore?: boolean, rest?: string): Flag & { command: string, ignore: boolean, rest: string };
     public static is(value: any, type: 'cancel'): value is Flag;
     public static is(value: any, type: 'continue'): value is Flag & { command: string, ignore: boolean, rest: string };
     public static is(value: any, type: 'retry'): value is Flag & { message: Message };

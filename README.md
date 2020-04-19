@@ -3,10 +3,11 @@
 This is basically just a fork of [discord-akairo](https://github.com/discord-akairo/discord-akairo) but It's in [Typescript](https://www.typescriptlang.org) and it uses CommandContext for prompts and shit.
 
 - [Kyflx Discord Server](https://discord.gg/BnQECNd)
+- [Kyflx Github](https://github.com/kyflx)
 
 ## Caveats
 
-If you for some reason want to use this in an already pretty large discord bot... don't lol, fork this and remove the command context stuff. But here are the caveats
+Here are some caveats of using this package:
 
 - Said Context
   - You have to use a `CommandContext` class instead of a traditional discord.js `Message` class for commands and prompts.
@@ -14,8 +15,11 @@ If you for some reason want to use this in an already pretty large discord bot..
 - Typescript
   - Typescript is fucking weird... that's all for this point lol.
   - This is real buggy because some errors wouldn't occur in JavaScript so we had to do some weird type casting and rearranging.
+- Made for [Kyflx (Discord Bot)](https://top.gg/bot/634766962378932224)
+  - Support will only be given to the developers and/or friends of the developers.
+  - There might be features that might break your current bot or won't fit well with your ideas.
 
-if you find an issue please join our discord server: https://discord.gg/BnQECNd
+if you find an issue please join our discord server: <https://discord.gg/BnQECNd>
 
 ## Customization
 
@@ -47,5 +51,5 @@ declare module "@kyflx-dev/akairo" {
 We do **not** provide support for this package as it was made for [Kyflx].
 
 ```bash
-$ npm install @kyflx-dev/akairo
+npm install @kyflx-dev/akairo
 ```

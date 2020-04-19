@@ -23,7 +23,6 @@ export class CommandUtil {
   public context: CommandContext = new (Structures.get("CommandContext"))(this);
   constructor(public handler: CommandHandler, public message: Message) {
     this.messages = this.handler.storeMessages ? new Collection() : null;
-    this.context._fix(message);
   }
 
   public setLastResponse(message: OrArray<Message>): Message {

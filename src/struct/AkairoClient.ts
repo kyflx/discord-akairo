@@ -1,18 +1,17 @@
-import { Snowflake, Client, ClientOptions, UserResolvable } from "discord.js";
+import { Client, ClientOptions, UserResolvable } from "discord.js";
 import { ClientUtil } from "./ClientUtil";
 
 export interface AkairoOptions {
-  ownerID?: Snowflake | Snowflake[];
+  ownerID?: string | string[];
 }
 
 export class AkairoClient extends Client {
   public util: ClientUtil = new ClientUtil(this);
-  public ownerID: Snowflake | Snowflake[];
+  public ownerID: string | string[];
 
-  constructor(options: AkairoOptions & ClientOptions = {}) {
+  public constructor(options: AkairoOptions & ClientOptions = {}) {
     super(options);
-    const { ownerID = "" } = options;
-    this.ownerID = ownerID;
+    this.ownerID = options.ownerID ?? "";
   }
 
   public isOwner(user: UserResolvable): boolean {

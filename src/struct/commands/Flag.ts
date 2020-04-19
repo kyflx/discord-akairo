@@ -2,7 +2,7 @@ import { Message } from "discord.js";
 import { Command } from "./Command";
 
 export class Flag {
-  command?: Command;
+  command?: string;
   ignore?: boolean;
   rest?: string;
   message?: Message;
@@ -25,7 +25,7 @@ export class Flag {
   }
 
   public static continue(
-    command: Command,
+    command: string,
     ignore: boolean = false,
     rest: string = null
   ) {
