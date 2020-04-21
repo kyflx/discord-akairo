@@ -128,7 +128,7 @@ declare module "@kyflx-dev/akairo" {
     public type: ListenerType;
     public handler: ListenerHandler;
     public constructor(id: string, options?: ListenerOptions);
-    public exec(): void;
+    public exec(...args: any[]): any;
   }
 
   export declare class ListenerHandler extends AkairoHandler<Listener> {
