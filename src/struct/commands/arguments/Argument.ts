@@ -516,7 +516,7 @@ export class Argument {
     }
 
     if (typeof type === "function") {
-      let res = type(message, phrase);
+      let res = type(message.util.context, phrase);
       if (Util.isPromise(res)) res = await res;
       return res;
     }
